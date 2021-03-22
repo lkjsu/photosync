@@ -12,3 +12,5 @@ __pycache__
 env.sh
 migrations
 *.idea
+ios/photosync/photosync.xcodeproj/project.xcworkspace
+ios/photosync/photosync.xcodeproj/xcuserdata/kish.xcuserdatad/xcschemes/xcschememanagement.plist
