@@ -11,6 +11,8 @@ struct ImageSelectorView: View {
     @State private var image: Image?
     @State private var showingImagePicker = false
     @State private var inputImage: UIImage?
+    @Binding var authenticated: Bool
+
         var body: some View {
     
             VStack {
@@ -32,7 +34,7 @@ struct ImageSelectorView: View {
                 }
             }
             .sheet(isPresented: $showingImagePicker, onDismiss: loadImage, content: {
-                ImagePickerManager(image: self.$inputImage)
+                ImagePickerManager( image: self.$inputImage, authenticated: self.$authenticated)
             })
         }
     

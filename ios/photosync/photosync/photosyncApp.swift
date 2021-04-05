@@ -13,11 +13,11 @@ import SwiftUI
 
 @main
 struct photosyncApp: App {
-    @State private var authenticated: Bool = false
+    @State private var authenticated: Bool = Auth().checkAuthentication(auth_token: KeyChainAccess().retrieveAuthToken())
     var body: some Scene {
         WindowGroup {
-            if KeyChainAccess().validateAuthToken() {
-                ImageSelectorView()
+            if authenticated {
+                ImageSelectorView(authenticated: self.$authenticated)
             }
             else{
                 LoginView(authenticated: self.$authenticated)

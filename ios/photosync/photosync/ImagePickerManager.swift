@@ -47,7 +47,7 @@ struct ImagePickerManager: UIViewControllerRepresentable {
                 guard let response = response as? HTTPURLResponse,
                       (200...299).contains(response.statusCode
                       ) else {
-                    print("server error")
+                    self.parent.authenticated = false
                     return
                 }
                 if let mimeType = response.mimeType,
@@ -76,7 +76,8 @@ struct ImagePickerManager: UIViewControllerRepresentable {
     
     @Environment(\.presentationMode) var presentationMode
     @Binding var image: UIImage?
-    
+    @Binding var authenticated: Bool
+
     func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePickerManager>) -> UIImagePickerController {
         debugPrint(#function)
 
