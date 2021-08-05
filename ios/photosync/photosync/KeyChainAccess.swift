@@ -16,9 +16,8 @@ class KeyChainAccess {
                                       kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
                                       kSecAttrApplicationTag as String: tag,
                                       kSecValueData as String: auth_token.data(using: String.Encoding.utf8)]
-        debugPrint(addQuery)
         let status = SecItemAdd(addQuery as CFDictionary, nil)
-        debugPrint(status)
+        debugPrint(#function," status:",status)
         guard status == errSecSuccess || status == errSecDuplicateItem else { throw Auth.AuthError.AuthenticationError.KeyChainAccessError}
     }
     
@@ -31,8 +30,8 @@ class KeyChainAccess {
         var item: CFTypeRef!
         let status = SecItemCopyMatching(getQuery as CFDictionary, &item)
         guard status == errSecSuccess else {
-            debugPrint(status)
-            return "notFound"
+            debugPrint(#function," status:",status)
+            return #function+" query not found"
         }
         let key = item as! Data
         return String(data: key, encoding: .utf8) ?? "notFound"
@@ -45,7 +44,7 @@ class KeyChainAccess {
         debugPrint(getQuery)
         var item: CFTypeRef?
         let status = SecItemCopyMatching(getQuery as CFDictionary, &item)
-        print("status", status)
+        print(#function," status:", status)
         if status == errSecDuplicateItem || status == errSecSuccess {
             return true
         } else {
@@ -61,7 +60,7 @@ class KeyChainAccess {
         debugPrint(auth_token)
         let isValidToken = Auth().checkAuthentication(auth_token: auth_token)
         if !isValidToken {
-            debugPrint("reach here inside valid token")
+            debugPrint(#function)
             return deleteAuthToken()
         }
         return isValidToken
@@ -75,7 +74,7 @@ class KeyChainAccess {
         debugPrint(getQuery)
         let status = SecItemDelete(getQuery as CFDictionary)
         guard status == errSecSuccess else {
-            debugPrint(status)
+            debugPrint(#function," status:",status)
             return false
         }
         return true

@@ -13,6 +13,8 @@ struct LoginView: View {
    @State private var password = ""
    @State private var auth_token:OSStatus = err_none
    @Binding var authenticated:Bool
+   let keychain = KeyChainAccess()
+
     
     var body: some View {
         VStack {
@@ -35,8 +37,18 @@ struct LoginView: View {
             })
             .foregroundColor(.white)
             .offset(y: -10)
-            .background(Rectangle().fill(Color.blue)
+            .background(Rectangle().fill(Color.gray)
                             .offset(y: -10))
+                    SignInWithAppleButton(.signIn, onRequest: {(request) in
+                    }, onCompletion: {(result) in
+                        switch(result) {
+                        case .success(let authorization):
+                            break
+                        case .failure(let error):
+                            break
+                        }
+                    }).signInWithAppleButtonStyle(.black)
+                    .fixedSize()
                 }
             )
         }
@@ -44,11 +56,16 @@ struct LoginView: View {
     
     func login() {
         debugPrint(#function)
-        let keychain = KeyChainAccess()
         authenticated = keychain.validateAuthToken()
         if !keychain.validateAuthToken() {
-            Auth().authenticate(email: self.email, password: self.password)
-            authenticated = true
+            let returnCode = Auth().authenticate(email: self.email, password: self.password)
+            debugPrint("Return code: Authenticate:",returnCode)
+            if returnCode == 200 {
+                authenticated = true
+            }
+            else {
+                authenticated = false
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ class UploadAPI(MethodView):
         f = open('bff.png', 'wb')
         f.write(request.get_data())
         f.close()
+        responseObject = {}
         if auth_header:
             try:
                 auth_token = auth_header.split(" ")[1]
@@ -43,6 +44,7 @@ class UploadAPI(MethodView):
                 'status': 'fail',
                 'message': resp
             }
+            return make_response(jsonify(responseObject)), 401
         else:
             responseObject = {
                 'status': 'fail',

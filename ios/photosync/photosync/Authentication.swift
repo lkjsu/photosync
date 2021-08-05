@@ -26,18 +26,18 @@ class Auth {
         }
     }
     
-    func authenticate(email: String, password: String) {
+    func authenticate(email: String, password: String) -> Int{
         debugPrint(#function)
         var auth_token:String = ""
-        let authUrl = URL(string: "http://127.0.0.1:5000/auth/login")!
+        let authUrl = URL(string: "http://192.168.1.90:5000/auth/login")!
         var request = URLRequest(url: authUrl)
+        var returnCode = 500
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let loginPayload = LoginPayload(email: email, password: password)
         guard let uploadData = try? JSONEncoder().encode(loginPayload) else {
-            print(EncodingError.self)
-            return
+            return 500
         }
         let semaphore = DispatchSemaphore(value: 0)
         let logintask = URLSession.shared.uploadTask(with: request, from: uploadData) {
@@ -47,34 +47,40 @@ class Auth {
             }
             guard let response = response as? HTTPURLResponse,
                   (200...299).contains(response.statusCode) else {
-                print("server error")
+//                debugPrint(response)
+                let ret = response as? HTTPURLResponse
+                returnCode = ret?.statusCode ?? 500
+                debugPrint(ret?.description)
                 semaphore.signal()
                 return
             }
-            if let mimeType = response.mimeType,
-               mimeType == "application/json",
-               let data = data,
-               let _ = String(data: data, encoding: .utf8) {
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String:Any]
-                    auth_token = json?["auth_token"] as? String ?? "something else"
-                    try KeyChainAccess().addAuthToken(auth_token: auth_token)
-                    semaphore.signal()
-                    
-                } catch {
-                    print("Something is wrong")
+            returnCode = response.statusCode
+            if returnCode == 200 {
+                if let mimeType = response.mimeType,
+                   mimeType == "application/json",
+                   let data = data,
+                   let _ = String(data: data, encoding: .utf8) {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String:Any]
+                        auth_token = json?["auth_token"] as? String ?? "something else"
+                        try KeyChainAccess().addAuthToken(auth_token: auth_token)
+                        returnCode = 200
+                        semaphore.signal()
+                    } catch {
+                        print("Something is wrong")
+                }
             }
-        }
+            }
         }
         logintask.resume()
         semaphore.wait()
-        
+        return returnCode
     }
     
     func checkAuthentication(auth_token: String) -> Bool{
         debugPrint(#function)
         var isValid = false
-        let authUrl = URL(string: "http://127.0.0.1:5000/auth/status")!
+        let authUrl = URL(string: "http://192.168.1.90:5000/auth/status")!
         var request = URLRequest(url: authUrl)
         request.httpMethod = "GET"
         request.setValue("auth_token "+auth_token, forHTTPHeaderField: "Authorization")
@@ -99,7 +105,7 @@ class Auth {
                     isValid = true
                     semaphore.signal()
                 } catch {
-                    print("Something is wrong")
+                    print(#function,"Something is wrong")
             }
         }
         }
