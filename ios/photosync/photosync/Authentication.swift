@@ -29,7 +29,7 @@ class Auth {
     func authenticate(email: String, password: String) -> Int{
         debugPrint(#function)
         var auth_token:String = ""
-        let authUrl = URL(string: "http://192.168.1.90:5000/auth/login")!
+        let authUrl = URL(string: "http://localhost:5000/auth/login")!
         var request = URLRequest(url: authUrl)
         var returnCode = 500
         request.httpMethod = "POST"
@@ -80,7 +80,7 @@ class Auth {
     func checkAuthentication(auth_token: String) -> Bool{
         debugPrint(#function)
         var isValid = false
-        let authUrl = URL(string: "http://192.168.1.90:5000/auth/status")!
+        let authUrl = URL(string: "http://localhost:5000/auth/status")!
         var request = URLRequest(url: authUrl)
         request.httpMethod = "GET"
         request.setValue("auth_token "+auth_token, forHTTPHeaderField: "Authorization")

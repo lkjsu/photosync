@@ -25,51 +25,47 @@ struct ImagePickerManager: UIViewControllerRepresentable {
             if let uiImage = info[.originalImage] as? UIImage {
                 parent.image = uiImage
             }
-            /*
-              TODO: Figure out how KeychainAccess works
-             
-             
-             */
-
-            // Make network call here
-            // Network call
-            let auth_token = KeyChainAccess().retrieveAuthToken()
-            let uploadurl = URL(string: "http://192.168.1.90:5000/upload")!
-            var uploadrequest = URLRequest(url: uploadurl)
-            uploadrequest.httpMethod = "POST"
-            uploadrequest.setValue("auth_token " + auth_token, forHTTPHeaderField: "Authorization")
-            let uploadtask = URLSession.shared.uploadTask(with: uploadrequest, from: parent.image?.pngData()) {
-                data, response, error in
-                if let error = error {
-                    print("error: \(error)")
-                    return
-                }
-                guard let response = response as? HTTPURLResponse,
-                      (200...299).contains(response.statusCode
-                      ) else {
-                    self.parent.authenticated = false
-                    return
-                }
-                if let mimeType = response.mimeType,
-                   mimeType == "application/json",
-                   let data = data,
-                   let dataString = String(data: data, encoding: .utf8) {
-                    do {
-                        let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String:Any]
-                        print("got data: \(json)")
-                    } catch {
-                        print("Something is wrong")
-                }
-            }
-            }
-//            logintask.resume()
-            uploadtask.resume()
-//            let image = ImageSender(auth_token: auth_token).sendImage(auth_token, parent.image)
+            self.parent.uploadImage(parentImage: parent.image!)
+//          let image = ImageSender(auth_token: auth_token).sendImage(auth_token, parent.image)
             parent.presentationMode.wrappedValue.dismiss()
             
         }
     }
     
+    func uploadImage(parentImage: UIImage) {
+        let auth_token = KeyChainAccess().retrieveAuthToken()
+        let uploadurl = URL(string: "http://localhost:5000/upload")!
+        var uploadrequest = URLRequest(url: uploadurl)
+        uploadrequest.httpMethod = "POST"
+        uploadrequest.setValue("auth_token " + auth_token, forHTTPHeaderField: "Authorization")
+        let uploadtask = URLSession.shared.uploadTask(with: uploadrequest, from: parentImage.pngData()) {
+            data, response, error in
+            if let error = error {
+                print("error: \(error)")
+                return
+            }
+            guard let response = response as? HTTPURLResponse,
+                  (200...299).contains(response.statusCode
+                  ) else {
+                self.authenticated = false
+                return
+            }
+            if let mimeType = response.mimeType,
+               mimeType == "application/json",
+               let data = data,
+               let dataString = String(data: data, encoding: .utf8) {
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String:Any]
+                    print("got data: \(json)")
+                } catch {
+                    print("Something is wrong")
+            }
+        }
+        }
+        uploadtask.resume()
+    }
+
+
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
