@@ -15,7 +15,6 @@ struct LoginView: View {
    @Binding var authenticated:Bool
    let keychain = KeyChainAccess()
 
-    
     var body: some View {
         VStack {
             Color
@@ -39,12 +38,14 @@ struct LoginView: View {
             .offset(y: -10)
             .background(Rectangle().fill(Color.gray)
                             .offset(y: -10))
-                    SignInWithAppleButton(.signIn, onRequest: {(request) in
+                    SignInWithAppleButton(.signIn, onRequest: {(request) in request.requestedScopes = [.fullName, .email]
                     }, onCompletion: {(result) in
                         switch(result) {
                         case .success(let authorization):
+                            print("Success!")
                             break
                         case .failure(let error):
+                            print("Error!")
                             break
                         }
                     }).signInWithAppleButtonStyle(.black)

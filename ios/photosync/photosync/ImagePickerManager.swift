@@ -34,7 +34,7 @@ struct ImagePickerManager: UIViewControllerRepresentable {
     
     func uploadImage(parentImage: UIImage) {
         let auth_token = KeyChainAccess().retrieveAuthToken()
-        let uploadurl = URL(string: "http://localhost:5000/upload")!
+        let uploadurl = URL(string: "http://0.0.0.0:5000/upload")!
         var uploadrequest = URLRequest(url: uploadurl)
         uploadrequest.httpMethod = "POST"
         uploadrequest.setValue("auth_token " + auth_token, forHTTPHeaderField: "Authorization")

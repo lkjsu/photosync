@@ -18,7 +18,7 @@ class KeyChainAccess {
                                       kSecValueData as String: auth_token.data(using: String.Encoding.utf8)]
         let status = SecItemAdd(addQuery as CFDictionary, nil)
         debugPrint(#function," status:",status)
-        guard status == errSecSuccess || status == errSecDuplicateItem else { throw Auth.AuthError.AuthenticationError.KeyChainAccessError}
+        guard status == errSecSuccess || status == errSecDuplicateItem else { throw Auth.AuthError.KeyChainAccessError}
     }
     
     func retrieveAuthToken() -> String {
