@@ -80,6 +80,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C00F71BD26BFC19100B54134 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		C00F71BE26BFC1A200B54134 /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				C076675C25D7C381003F522F /* Authentication.swift */,
+				C0BE2CD925FEFB7600A97377 /* KeyChainAccess.swift */,
+			);
+			path = Security;
+			sourceTree = "<group>";
+		};
+		C00F71BF26BFC1E900B54134 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C0AB1C7225CE7E4E00841F3C /* ImageSelectorView.swift */,
+				C042209A25CBF48200BBA3B8 /* LoginView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C00F71C026BFC21100B54134 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				C076675725D7BDBB003F522F /* ImagePickerManager.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		C042205025CBF35F00BBA3B8 = {
 			isa = PBXGroup;
 			children = (
@@ -103,14 +136,13 @@
 		C042205B25CBF35F00BBA3B8 /* photosync */ = {
 			isa = PBXGroup;
 			children = (
-				C042205C25CBF35F00BBA3B8 /* photosyncApp.swift */,
+				C00F71C026BFC21100B54134 /* Controller */,
+				C00F71BF26BFC1E900B54134 /* Views */,
+				C00F71BE26BFC1A200B54134 /* Security */,
+				C00F71BD26BFC19100B54134 /* Network */,
 				C042206025CBF36800BBA3B8 /* Assets.xcassets */,
-				C042209A25CBF48200BBA3B8 /* LoginView.swift */,
 				C042206525CBF36800BBA3B8 /* Info.plist */,
-				C0AB1C7225CE7E4E00841F3C /* ImageSelectorView.swift */,
-				C076675725D7BDBB003F522F /* ImagePickerManager.swift */,
-				C076675C25D7C381003F522F /* Authentication.swift */,
-				C0BE2CD925FEFB7600A97377 /* KeyChainAccess.swift */,
+				C042205C25CBF35F00BBA3B8 /* photosyncApp.swift */,
 				C042206225CBF36800BBA3B8 /* Preview Content */,
 			);
 			path = photosync;
