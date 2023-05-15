@@ -20,9 +20,11 @@ make sure to use python 3.9
  ```
 #### install requirements
 ```
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 #### run the server
-```python manage.py runserver
+
+```
+python manage.py runserver
 ```
