@@ -28,3 +28,4 @@ pip install -r requirements.txt
 ```
 python manage.py runserver
 ```
+![example](https://github.com/lkjsu/photosync/blob/main/assets/example.gif)
