@@ -3,7 +3,7 @@
 ### What was the goal?
 
 - Try how UIImagePickerControllerDelegate could be used to select images in the iOS filesystem and send it over the network.
-- Test how the KeyChain could be used to store sensitive information on the iOS device.
+- store auth token in KeyChain.
 - get familiar with SwiftUI.
 
 ### How it works?
